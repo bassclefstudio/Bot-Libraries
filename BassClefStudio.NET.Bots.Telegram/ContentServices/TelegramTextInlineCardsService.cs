@@ -10,7 +10,7 @@ using Telegram.Bot.Types.InlineQueryResults;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
-    public class TelegramTextInlineCardsService : IBotInlineCardService<TelegramBotService>
+    internal class TelegramTextInlineCardsService : IBotInlineCardService<TelegramBotService>
     {
         public bool CanSend(InlineCards cards)
         {
