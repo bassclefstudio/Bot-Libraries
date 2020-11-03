@@ -4,6 +4,7 @@ using BassClefStudio.NET.Bots.Helpers;
 using BassClefStudio.NET.Bots.Inline;
 using BassClefStudio.NET.Bots.Services;
 using BassClefStudio.NET.Bots.Telegram.ContentServices;
+using BassClefStudio.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -212,6 +213,8 @@ namespace BassClefStudio.NET.Bots.Telegram
                     CallbackReceived?.Invoke(
                         this,
                         new CallbackReceivedEventArgs(action, fromChat));
+
+                    SynchronousTask answerTask = new SynchronousTask(() => BotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id));
 
                     if (action.OneTime)
                     {
