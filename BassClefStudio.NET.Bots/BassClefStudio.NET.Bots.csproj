@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageProjectUrl>https://github.com/bassclefstudio/Bot-Libraries</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bassclefstudio/Bot-Libraries.git</RepositoryUrl>
+    <Authors>BassClefStudio</Authors>
+    <Description>A .NET Standard library for managing and dealing with bot communicatoin in a platform-agnostic manner.</Description>
   </PropertyGroup>
 
   <ItemGroup>
