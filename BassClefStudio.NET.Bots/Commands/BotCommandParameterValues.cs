@@ -11,8 +11,15 @@ using System.Threading.Tasks;
 
 namespace BassClefStudio.NET.Bots.Commands
 {
+    /// <summary>
+    /// Represents an object that can resolve and provide a keyed collection of <see cref="BotCommandParameterValue"/>s from a <see cref="BotCommandParameterInfo"/> collection.
+    /// </summary>
     public class BotCommandParameterValues
     {
+        /// <summary>
+        /// Gets the <see cref="string"/> content of the <see cref="BotCommandParameterValue"/> attached to the given <see cref="BotCommandParameterInfo.Name"/>.
+        /// </summary>
+        /// <param name="name">The <see cref="string"/> name of the value.</param>
         public string this[string name]
         {
             get
@@ -21,6 +28,10 @@ namespace BassClefStudio.NET.Bots.Commands
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="string"/> content of the <see cref="BotCommandParameterValue"/> attached to the given <see cref="BotCommandParameterInfo"/>.
+        /// </summary>
+        /// <param name="parameterInfo">A <see cref="BotCommandParameterInfo"/> containing information about the value to retrieve.</param>
         public string this[BotCommandParameterInfo parameterInfo]
         {
             get
@@ -35,6 +46,10 @@ namespace BassClefStudio.NET.Bots.Commands
 
         private List<Tuple<BotCommandParameterInfo, BotCommandParameterValue>> ParameterValues;
 
+        /// <summary>
+        /// Creates a new <see cref="BotCommandParameterValues"/> for the given <see cref="IBotCommand"/>.
+        /// </summary>
+        /// <param name="botCommand">The <see cref="IBotCommand"/> to retrieve and build the collection of <see cref="BotCommandParameterValue"/>s for.</param>
         public BotCommandParameterValues(IBotCommand botCommand)
         {
             ParameterValues = new List<Tuple<BotCommandParameterInfo, BotCommandParameterValue>>();
@@ -44,6 +59,12 @@ namespace BassClefStudio.NET.Bots.Commands
             }
         }
 
+        /// <summary>
+        /// Populates the colllection of <see cref="BotCommandParameterValue"/>s by requesting information asynchronously from the user and setting up callbacks.
+        /// </summary>
+        /// <param name="bot">The <see cref="Bot"/> to request the information with.</param>
+        /// <param name="context">The <see cref="BotChat"/> user to request information from.</param>
+        /// <param name="commandCallback">A <see cref="Func{TResult}"/> returning a <see cref="Task"/> that is asynchronously run when all parameters have been resolved.</param>
         public void PopulateValues(Bot bot, BotChat context, Func<Task> commandCallback)
         {
             Debug.WriteLine("Starting to populate values...");
@@ -95,12 +116,23 @@ namespace BassClefStudio.NET.Bots.Commands
         }
     }
 
+    /// <summary>
+    /// Represents the result of a parameter request in an <see cref="IBotCommand"/>.
+    /// </summary>
     public class BotCommandParameterValue
     {
+        /// <summary>
+        /// The content of the <see cref="BotCommandParameterValue"/> as a <see cref="string"/>.
+        /// </summary>
         public string Content { get; set; }
-        public BotCommandParameterValue()
+
+        /// <summary>
+        /// Creates a new <see cref="BotCommandParameterValue"/>.
+        /// </summary>
+        /// <param name="content">The content of the <see cref="BotCommandParameterValue"/>. Defaults to null.</param>
+        public BotCommandParameterValue(string content = null)
         {
-            Content = null;
+            Content = content;
         }
     }
 }

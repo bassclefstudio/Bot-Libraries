@@ -126,7 +126,7 @@ namespace BassClefStudio.NET.Bots.Services
                 if (myCommand != null)
                 {
                     var inputs = new BotCommandParameterValues(myCommand);
-                    inputs.PopulateValues(this, chat, () => myCommand.Execute(this, chat, inputs));
+                    inputs.PopulateValues(this, chat, () => myCommand.ExecuteAsync(this, chat, inputs));
                 }
                 else
                 {
