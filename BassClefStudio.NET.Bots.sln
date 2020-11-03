@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BassClefStudio.NET.Bots", "BassClefStudio.NET.Bots\BassClefStudio.NET.Bots.csproj", "{8AC942F4-898C-4ECE-B2C5-85B1A50C5F63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BassClefStudio.NET.Bots.Telegram", "BassClefStudio.NET.Bots.Telegram\BassClefStudio.NET.Bots.Telegram.csproj", "{14996512-BE0E-4CE2-85E6-C205BB76E78C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AC942F4-898C-4ECE-B2C5-85B1A50C5F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC942F4-898C-4ECE-B2C5-85B1A50C5F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC942F4-898C-4ECE-B2C5-85B1A50C5F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC942F4-898C-4ECE-B2C5-85B1A50C5F63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14996512-BE0E-4CE2-85E6-C205BB76E78C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14996512-BE0E-4CE2-85E6-C205BB76E78C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14996512-BE0E-4CE2-85E6-C205BB76E78C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14996512-BE0E-4CE2-85E6-C205BB76E78C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B58A78E-3F22-4D17-8D54-DB57C712016A}
+	EndGlobalSection
+EndGlobal
