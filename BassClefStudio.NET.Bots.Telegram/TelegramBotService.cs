@@ -215,6 +215,7 @@ namespace BassClefStudio.NET.Bots.Telegram
                         new CallbackReceivedEventArgs(action, fromChat));
 
                     SynchronousTask answerTask = new SynchronousTask(() => BotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id));
+                    answerTask.RunTask();
 
                     if (action.OneTime)
                     {
