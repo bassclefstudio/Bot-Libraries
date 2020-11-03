@@ -55,14 +55,14 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// <param name="sendServices">A collection of <see cref="IBotSendService{TService}"/>s that support this <see cref="TelegramBotService"/>.</param>
         /// <param name="recieveServices">A collection of <see cref="IBotRecieveService{TMessage}"/>s that support this <see cref="TelegramBotService"/>.</param>
         /// <param name="inlineCardServices">A collection of <see cref="IBotInlineCardService{TService}"/>s that support this <see cref="TelegramBotService"/>.</param>
-        public TelegramBotService(TelegramBotOptions options, IEnumerable<IBotSendService<TelegramBotService>> sendServices, IEnumerable<IBotRecieveService<Message>> recieveServices, IEnumerable<IBotInlineCardService<TelegramBotService>> inlineCardServices)
+        public TelegramBotService(TelegramBotOptions options, IEnumerable<IBotSendService<TelegramBotService>> sendServices = null, IEnumerable<IBotRecieveService<Message>> recieveServices = null, IEnumerable<IBotInlineCardService<TelegramBotService>> inlineCardServices = null)
         {
             KnownChats = new List<TelegramChat>();
             KnownUsers = options.KnownUsers.Select(u => new TelegramUser(u)).ToArray();
             AccessToken = options.AccessToken;
-            SendServices = new List<IBotSendService<TelegramBotService>>(sendServices);
-            RecieveServices = new List<IBotRecieveService<Message>>(recieveServices);
-            InlineCardServices = new List<IBotInlineCardService<TelegramBotService>>(inlineCardServices);
+            SendServices = new List<IBotSendService<TelegramBotService>>(sendServices ?? new IBotSendService<TelegramBotService>[0]);
+            RecieveServices = new List<IBotRecieveService<Message>>(recieveServices ?? new IBotRecieveService<Message>[0]);
+            InlineCardServices = new List<IBotInlineCardService<TelegramBotService>>(inlineCardServices ?? new IBotInlineCardService<TelegramBotService>[0]);
             ////Add default services
             SendServices.Add(new TelegramTextSendService());
             SendServices.Add(new TelegramParameterRequestSendService());
