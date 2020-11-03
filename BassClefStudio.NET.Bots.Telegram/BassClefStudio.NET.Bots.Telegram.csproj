@@ -7,10 +7,11 @@
     <Authors>BassClefStudio.NET</Authors>
     <PackageProjectUrl>https://github.com/bassclefstudio/Bot-Libraries</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bassclefstudio/Bot-Libraries.git</RepositoryUrl>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BassClefStudio.NET.Core" Version="1.4.0" />
     <PackageReference Include="Telegram.Bot" Version="15.7.1" />
   </ItemGroup>
 
