@@ -207,15 +207,15 @@ namespace BassClefStudio.NET.Bots.Telegram
             var fromChat = KnownChats.FirstOrDefault(c => c.ChatId == e.CallbackQuery.Message.Chat.Id);
             if (fromChat != null)
             {
+                SynchronousTask answerTask = new SynchronousTask(() => BotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "Done!"));
+                answerTask.RunTask();
+
                 var action = fromChat.CurrentCallbackActions.FirstOrDefault(a => a.CallbackParameter == e.CallbackQuery.Data);
                 if (action != null)
                 {
                     CallbackReceived?.Invoke(
                         this,
                         new CallbackReceivedEventArgs(action, fromChat));
-
-                    SynchronousTask answerTask = new SynchronousTask(() => BotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id));
-                    answerTask.RunTask();
 
                     if (action.OneTime)
                     {
