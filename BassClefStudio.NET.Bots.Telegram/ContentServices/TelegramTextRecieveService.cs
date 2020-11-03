@@ -9,7 +9,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
-    public class TelegramTextRecieveService : IBotRecieveService<Message>
+    internal class TelegramTextRecieveService : IBotRecieveService<Message>
     {
         public bool CanConvert(Message message)
         {

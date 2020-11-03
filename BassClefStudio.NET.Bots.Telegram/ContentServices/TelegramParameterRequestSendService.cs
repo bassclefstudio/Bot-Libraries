@@ -9,7 +9,7 @@ using Telegram.Bot.Types.Payments;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
-    public class TelegramParameterRequestSendService : IBotSendService<TelegramBotService>
+    internal class TelegramParameterRequestSendService : IBotSendService<TelegramBotService>
     {
         public bool CanSend(IMessageContent message)
         {

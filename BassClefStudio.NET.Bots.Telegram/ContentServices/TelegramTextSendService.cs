@@ -10,7 +10,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
-    public class TelegramTextSendService : IBotSendService<TelegramBotService>
+    internal class TelegramTextSendService : IBotSendService<TelegramBotService>
     {
         public bool CanSend(IMessageContent message)
         {
