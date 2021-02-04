@@ -183,7 +183,7 @@ namespace BassClefStudio.NET.Bots
 
         private void HandleCallback(object sender, CallbackReceivedEventArgs e)
         {
-            SynchronousTask actionTask = new SynchronousTask(() => e.CallbackAction.Invoke(this, e.FromChat), SynchronousTask.DefaultExceptionAction);
+            SynchronousTask actionTask = new SynchronousTask(() => e.CallbackAction.Invoke(this, e.ChatContext), SynchronousTask.DefaultExceptionAction);
             _ = actionTask.RunTaskAsync();
 
             CallbackReceived?.Invoke(this, e);
