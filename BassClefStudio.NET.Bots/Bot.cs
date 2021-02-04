@@ -22,7 +22,7 @@ namespace BassClefStudio.NET.Bots
         /// <summary>
         /// The name of this <see cref="Bot"/>.
         /// </summary>
-        public string BotName { get; }
+        public string BotName { get; set; }
 
         private IBotService BotService { get; }
         /// <summary>
