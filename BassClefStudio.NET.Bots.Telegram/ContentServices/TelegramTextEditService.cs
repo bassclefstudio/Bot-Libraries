@@ -5,22 +5,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
-    internal class TelegramTextSendService : IBotSendService<TelegramBotService>
+    internal class TelegramTextEditService : IBotEditService<TelegramBotService>
     {
         /// <inheritdoc/>
-        public bool CanSend(IMessageContent message)
+        public bool CanEdit(IMessageContent message)
         {
-            return message is TextMessageContent;
+            return message is TextMessageContent
+                && !string.IsNullOrEmpty(message.Id);
         }
-
+        
         /// <inheritdoc/>
-        public async Task<bool> SendMessageAsync(TelegramBotService service, IMessageContent message, BotChat chat)
+        public async Task<bool> EditMessageAsync(TelegramBotService service, IMessageContent message, BotChat chat)
         {
             var textMessage = message as TextMessageContent;
             var telegramChat = chat as TelegramChat;
@@ -28,10 +29,10 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
             Message success;
             if (textMessage.Actions != null && textMessage.Actions.Any())
             {
-                success = await service.BotClient.SendTextMessageAsync(
-                    telegramChat.ChatId,
+                success = await service.BotClient.EditMessageTextAsync(
+                    new ChatId(telegramChat.ChatId),
+                    int.Parse(message.Id),
                     textMessage.Text,
-                    ParseMode.Html,
                     replyMarkup: new InlineKeyboardMarkup(
                         textMessage.Actions.Select(
                             a => InlineKeyboardButton.WithCallbackData(a.DisplayName, a.CallbackParameter))));
@@ -40,21 +41,13 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
             }
             else
             {
-                success = await service.BotClient.SendTextMessageAsync(
-                    telegramChat.ChatId,
-                    textMessage.Text,
-                    ParseMode.Html);
+                success = await service.BotClient.EditMessageTextAsync(
+                    new ChatId(telegramChat.ChatId),
+                    int.Parse(message.Id),
+                    textMessage.Text);
             }
 
-            if (success != null)
-            {
-                textMessage.Id = success.MessageId.ToString();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return success != null;
         }
     }
 }

@@ -14,6 +14,9 @@ namespace BassClefStudio.NET.Bots.Content
         /// </summary>
         public string CommandName { get; }
 
+        /// <inheritdoc/>
+        public string Id { get; set; }
+
         /// <summary>
         /// Creates a new <see cref="CommandMessageContent"/>.
         /// </summary>

@@ -11,22 +11,32 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
     internal class TelegramParameterRequestSendService : IBotSendService<TelegramBotService>
     {
+        /// <inheritdoc/>
         public bool CanSend(IMessageContent message)
         {
             return message is ParameterRequestMessageContent;
         }
 
+        /// <inheritdoc/>
         public async Task<bool> SendMessageAsync(TelegramBotService service, IMessageContent message, BotChat chat)
         {
             var requestMessage = message as ParameterRequestMessageContent;
             var telegramChat = chat as TelegramChat;
 
-            var sucess = await service.BotClient.SendTextMessageAsync(
+            var success = await service.BotClient.SendTextMessageAsync(
                 telegramChat.ChatId, 
                 $"<b>{requestMessage.ParameterName}</b>\r\n{requestMessage.ParameterDescription}", 
                 ParseMode.Html);
-            
-            return sucess != null;
+
+            if (success != null)
+            {
+                requestMessage.Id = success.MessageId.ToString();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

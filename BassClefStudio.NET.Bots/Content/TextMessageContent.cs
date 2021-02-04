@@ -15,13 +15,16 @@ namespace BassClefStudio.NET.Bots.Content
         /// </summary>
         public string Text { get; }
 
+        /// <inheritdoc/>
+        public string Id { get; set; }
+
         /// <summary>
         /// A collection of <see cref="CallbackBotAction"/>s that represent attached actionable buttons or responses.
         /// </summary>
         public IEnumerable<CallbackBotAction> Actions { get; }
 
         /// <summary>
-        /// Creates a new <see cref="TextMessageContent"/>.
+        /// Creates a new <see cref="TextMessageContent"/> with a unique ID.
         /// </summary>
         /// <param name="text">The content of the message.</param>
         /// <param name="actions">A collection of <see cref="CallbackBotAction"/>s that represent attached actionable buttons or responses.</param>

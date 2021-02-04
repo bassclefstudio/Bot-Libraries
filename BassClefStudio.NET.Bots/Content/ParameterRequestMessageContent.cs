@@ -21,6 +21,9 @@ namespace BassClefStudio.NET.Bots.Content
         /// </summary>
         public string ParameterDescription { get; }
 
+        /// <inheritdoc/>
+        public string Id { get; set; }
+
         /// <summary>
         /// An action to be run with the <see cref="IMessageContent"/> response when it is recieved.
         /// </summary>

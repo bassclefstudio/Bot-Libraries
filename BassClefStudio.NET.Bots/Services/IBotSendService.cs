@@ -19,7 +19,7 @@ namespace BassClefStudio.NET.Bots.Services
         /// <param name="message">The <see cref="IMessageContent"/> message to send.</param>
         /// <param name="chat">The <see cref="BotChat"/> to send the message to.</param>
         Task<bool> SendMessageAsync(TService service, IMessageContent message, BotChat chat);
-        
+
         /// <summary>
         /// Returns a <see cref="bool"/> value indicating whether this <see cref="IBotSendService{TService}"/> can be used to send the given <see cref="IMessageContent"/>.
         /// </summary>

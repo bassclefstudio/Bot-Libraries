@@ -3,6 +3,7 @@ using BassClefStudio.NET.Bots.Commands;
 using BassClefStudio.NET.Bots.Content;
 using BassClefStudio.NET.Bots.Helpers;
 using BassClefStudio.NET.Bots.Inline;
+using BassClefStudio.NET.Bots.Services;
 using BassClefStudio.NET.Core;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BassClefStudio.NET.Bots.Services
+namespace BassClefStudio.NET.Bots
 {
     /// <summary>
     /// Represents a bot, an automated service that provides interaction between itself (or some back-end service) and a user using an <see cref="IBotService"/>.
@@ -107,6 +108,26 @@ namespace BassClefStudio.NET.Bots.Services
             return success;
         }
 
+        /// <summary>
+        /// Attempts to edit a message from the <see cref="Bot"/> through the current <see cref="IBotService"/>.
+        /// </summary>
+        /// <param name="content">The <see cref="IMessageContent"/> of the existing message with updated content.</param>
+        /// <param name="chat">The <see cref="BotChat"/> to send the message to.</param>
+        public async Task<bool> AttemptEditMessageAsync(IMessageContent content, BotChat chat)
+        {
+            if (chat.MessageHistory.Contains(content))
+            {
+                var success = await BotService.SendMessageAsync(content, chat);
+                //// Does not add message to chat history, because the message content has already been added.
+                return success;
+            }
+            else
+            {
+                //// The message is not present in the chat history for the given chat.
+                return false;
+            }
+        }
+
         private void HandleMessage(object sender, MessageReceivedEventArgs e)
         {
             ProcessMessage(e.ReceivedContent, e.ChatContext);
@@ -130,12 +151,12 @@ namespace BassClefStudio.NET.Bots.Services
                 }
                 else
                 {
-                    ////Command not found.
+                    //// Command not found.
                 }
             }
             else
             {
-                ////Message not understood.
+                //// Message not understood.
             }
         }
 
@@ -156,7 +177,7 @@ namespace BassClefStudio.NET.Bots.Services
             }
             else
             {
-                ////Handler not found.
+                //// Handler not found.
             }
         }
 

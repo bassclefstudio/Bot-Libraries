@@ -37,6 +37,10 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// </summary>
         public List<IBotSendService<TelegramBotService>> SendServices { get; }
         /// <summary>
+        /// A collection of <see cref="IBotEditService{TService}"/>s that support this <see cref="TelegramBotService"/>.
+        /// </summary>
+        public List<IBotEditService<TelegramBotService>> EditServices { get; }
+        /// <summary>
         /// A collection of <see cref="IBotInlineCardService{TService}"/>s that support this <see cref="TelegramBotService"/>.
         /// </summary>
         public List<IBotInlineCardService<TelegramBotService>> InlineCardServices { get; }
@@ -54,19 +58,22 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// </summary>
         /// <param name="options">A <see cref="TelegramBotOptions"/> object providing options and secrets for creating the connection.</param>
         /// <param name="sendServices">A collection of <see cref="IBotSendService{TService}"/>s that support this <see cref="TelegramBotService"/>.</param>
+        /// <param name="editServices">A collection of <see cref="IBotEditService{TService}"/>s that support this <see cref="TelegramBotService"/>.</param>
         /// <param name="recieveServices">A collection of <see cref="IBotRecieveService{TMessage}"/>s that support this <see cref="TelegramBotService"/>.</param>
         /// <param name="inlineCardServices">A collection of <see cref="IBotInlineCardService{TService}"/>s that support this <see cref="TelegramBotService"/>.</param>
-        public TelegramBotService(TelegramBotOptions options, IEnumerable<IBotSendService<TelegramBotService>> sendServices = null, IEnumerable<IBotRecieveService<Message>> recieveServices = null, IEnumerable<IBotInlineCardService<TelegramBotService>> inlineCardServices = null)
+        public TelegramBotService(TelegramBotOptions options, IEnumerable<IBotSendService<TelegramBotService>> sendServices = null, IEnumerable<IBotEditService<TelegramBotService>> editServices = null, IEnumerable<IBotRecieveService<Message>> recieveServices = null, IEnumerable<IBotInlineCardService<TelegramBotService>> inlineCardServices = null)
         {
             KnownChats = new List<TelegramChat>();
             KnownUsers = options.KnownUsers.Select(u => new TelegramUser(u)).ToArray();
             AccessToken = options.AccessToken;
-            SendServices = new List<IBotSendService<TelegramBotService>>(sendServices ?? new IBotSendService<TelegramBotService>[0]);
-            RecieveServices = new List<IBotRecieveService<Message>>(recieveServices ?? new IBotRecieveService<Message>[0]);
-            InlineCardServices = new List<IBotInlineCardService<TelegramBotService>>(inlineCardServices ?? new IBotInlineCardService<TelegramBotService>[0]);
+            SendServices = new List<IBotSendService<TelegramBotService>>(sendServices ?? Array.Empty<IBotSendService<TelegramBotService>>());
+            EditServices = new List<IBotEditService<TelegramBotService>>(editServices ?? Array.Empty< IBotEditService<TelegramBotService>>());
+            RecieveServices = new List<IBotRecieveService<Message>>(recieveServices ?? Array.Empty<IBotRecieveService<Message>>());
+            InlineCardServices = new List<IBotInlineCardService<TelegramBotService>>(inlineCardServices ?? Array.Empty<IBotInlineCardService<TelegramBotService>>());
             ////Add default services
             SendServices.Add(new TelegramTextSendService());
             SendServices.Add(new TelegramParameterRequestSendService());
+            EditServices.Add(new TelegramTextEditService());
             RecieveServices.Add(new TelegramTextRecieveService());
             InlineCardServices.Add(new TelegramTextInlineCardsService());
         }
@@ -147,6 +154,29 @@ namespace BassClefStudio.NET.Bots.Telegram
                 if (sendService != null)
                 {
                     return await sendService.SendMessageAsync(this, message, chat);
+                }
+                else
+                {
+                    ////No chat send service found.
+                    return false;
+                }
+            }
+            else
+            {
+                ////Chat unauthorized.
+                return false;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> AttemptEditMessageAsync(IMessageContent message, BotChat chat)
+        {
+            if (KnownChats.Contains(chat))
+            {
+                var editService = EditServices.FirstOrDefault(s => s.CanEdit(message));
+                if (editService != null)
+                {
+                    return await editService.EditMessageAsync(this, message, chat);
                 }
                 else
                 {

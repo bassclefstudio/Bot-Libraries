@@ -1,5 +1,6 @@
 ﻿using BassClefStudio.NET.Bots.Actions;
 using BassClefStudio.NET.Bots.Services;
+using BassClefStudio.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BassClefStudio.NET.Bots.Content
     /// <summary>
     /// Represents an identifiable conversation with a user (or a group of users).
     /// </summary>
-    public abstract class BotChat
+    public abstract class BotChat : IIdentifiable<string>
     {
         /// <summary>
         /// The ID of this <see cref="BotChat"/>.
@@ -33,11 +34,6 @@ namespace BassClefStudio.NET.Bots.Content
     /// <summary>
     /// Represents the individual user in the bot framework, as opposed to the chat that they use to communicate (see <see cref="BotChat"/>).
     /// </summary>
-    public interface IBotUser
-    {
-        /// <summary>
-        /// The ID of the specific user.
-        /// </summary>
-        string Id { get; }
-    }
+    public interface IBotUser : IIdentifiable<string>
+    { }
 }

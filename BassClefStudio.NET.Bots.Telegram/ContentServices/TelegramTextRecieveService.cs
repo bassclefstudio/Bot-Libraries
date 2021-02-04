@@ -11,11 +11,13 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
     internal class TelegramTextRecieveService : IBotRecieveService<Message>
     {
+        /// <inheritdoc/>
         public bool CanConvert(Message message)
         {
             return message.Type == MessageType.Text;
         }
 
+        /// <inheritdoc/>
         public IMessageContent ConvertMessage(Message message)
         {
             if (message.Text[0] == '/')

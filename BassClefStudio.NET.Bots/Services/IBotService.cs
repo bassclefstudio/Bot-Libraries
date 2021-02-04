@@ -37,6 +37,13 @@ namespace BassClefStudio.NET.Bots.Services
         Task<bool> SendMessageAsync(IMessageContent message, BotChat chat);
 
         /// <summary>
+        /// Edits an existing message through this <see cref="IBotService"/> through the current <see cref="IBotService"/>. If editing/replacing messages is not supported, this is the same as calling <see cref="SendMessageAsync(IMessageContent, BotChat)"/>.
+        /// </summary>
+        /// <param name="message">The <see cref="IMessageContent"/> of the existing message with updated content.</param>
+        /// <param name="chat">The <see cref="BotChat"/> to send the message to.</param>
+        Task<bool> AttemptEditMessageAsync(IMessageContent message, BotChat chat);
+
+        /// <summary>
         /// An event fired when a message is recieved from a user.
         /// </summary>
         event EventHandler<MessageReceivedEventArgs> MessageReceived;

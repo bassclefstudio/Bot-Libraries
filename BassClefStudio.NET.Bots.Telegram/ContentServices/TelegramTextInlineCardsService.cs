@@ -12,12 +12,14 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 {
     internal class TelegramTextInlineCardsService : IBotInlineCardService<TelegramBotService>
     {
+        /// <inheritdoc/>
         public bool CanSend(InlineCards cards)
         {
             return cards.Query is TelegramInlineQuery
                 && cards.Cards.All(c => c is TextInlineCard);
         }
 
+        /// <inheritdoc/>
         public async Task<bool> SendCardsAsync(TelegramBotService service, InlineCards cards)
         {
             var telegramQuery = cards.Query as TelegramInlineQuery;
