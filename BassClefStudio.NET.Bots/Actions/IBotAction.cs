@@ -63,7 +63,8 @@ namespace BassClefStudio.NET.Bots.Actions
         /// <param name="actions">The collection of <see cref="IBotAction"/>s to await.</param>
         public static async Task AwaitCompletionAsync(this IEnumerable<IBotAction> actions)
         {
-            await Task.WhenAny(actions.Select(a => a.AwaitCompletionTask));
+            var completed = await Task.WhenAny(actions.Select(a => a.AwaitCompletionTask));
+            await completed;
         }
 
         /// <summary>
