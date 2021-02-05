@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BassClefStudio.NET.Bots.Commands
 {
     /// <summary>
-    /// Represents a dictionary of <see cref="BotParameterRequest"/>s and their retreived values.
+    /// Represents a dictionary of <see cref="BotParameterRequest"/>s and their retrieved values.
     /// </summary>
     public class BotParameters
     {
@@ -28,7 +28,7 @@ namespace BassClefStudio.NET.Bots.Commands
         /// <summary>
         /// Creates a new <see cref="BotParameters"/> collection.
         /// </summary>
-        /// <param name="infos">The collection of <see cref="BotParameterRequest"/>s describing the parameters to retreive.</param>
+        /// <param name="infos">The collection of <see cref="BotParameterRequest"/>s describing the parameters to retrieve.</param>
         public BotParameters(IEnumerable<BotParameterRequest> infos)
         {
             Parameters = new Dictionary<BotParameterRequest, string>();
@@ -39,7 +39,7 @@ namespace BassClefStudio.NET.Bots.Commands
         }
 
         /// <summary>
-        /// Retreives values for every parameter in the <see cref="Parameters"/> collection asynchronously.
+        /// retrieves values for every parameter in the <see cref="Parameters"/> collection asynchronously.
         /// </summary>
         /// <param name="bot">The <see cref="Bot"/> through which to send messages.</param>
         /// <param name="context">The <see cref="BotChat"/> to send the requests to.</param>
@@ -47,7 +47,7 @@ namespace BassClefStudio.NET.Bots.Commands
         {
             foreach (var param in Parameters.Keys)
             {
-                ParameterRequestMessageContent content = new ParameterRequestMessageContent(param.DisplayName, param.Description);
+                ParameterRequestMessageContent content = new ParameterRequestMessageContent(param);
                 await bot.SendMessageAsync(content, context);
                 var response = await content.GetResponse;
                 if (response is TextMessageContent textMessage)

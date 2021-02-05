@@ -12,14 +12,9 @@ namespace BassClefStudio.NET.Bots.Content
     public class ParameterRequestMessageContent : IMessageContent
     {
         /// <summary>
-        /// The name of the parameter to request. See <see cref="BotParameterRequest.DisplayName"/>.
+        /// The <see cref="BotParameterRequest"/> detailing the requested parameter.
         /// </summary>
-        public string ParameterName { get; }
-
-        /// <summary>
-        /// A description of the parameter to request. See <see cref="BotParameterRequest.Description"/>.
-        /// </summary>
-        public string ParameterDescription { get; }
+        public BotParameterRequest Request { get; set; }
 
         /// <inheritdoc/>
         public string Id { get; set; }
@@ -37,12 +32,10 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// Creates a new <see cref="ParameterRequestMessageContent"/>.
         /// </summary>
-        /// <param name="parameterName">The name of the parameter to request.</param>
-        /// <param name="parameterDescription">A description of the parameter to request.</param>
-        public ParameterRequestMessageContent(string parameterName, string parameterDescription)
+        /// <param name="request">The <see cref="BotParameterRequest"/> detailing the requested parameter.</param>
+        public ParameterRequestMessageContent(BotParameterRequest request)
         {
-            ParameterName = parameterName;
-            ParameterDescription = parameterDescription;
+            Request = request;
             CompletionSource = new TaskCompletionSource<IMessageContent>();
         }
     }
