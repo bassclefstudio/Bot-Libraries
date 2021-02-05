@@ -139,15 +139,15 @@ namespace BassClefStudio.NET.Bots
         {
             if (chat.MessageHistory.Any() && chat.MessageHistory.Last() is ParameterRequestMessageContent request)
             {
-                request.ResultCallback(message);
+                request.CompletionSource.TrySetResult(message);
             }
             else if (message is CommandMessageContent commandMessage)
             {
                 var myCommand = Commands.FirstOrDefault(c => c.CanExecute(commandMessage));
                 if (myCommand != null)
                 {
-                    var inputs = new BotCommandParameterValues(myCommand);
-                    inputs.PopulateValues(this, chat, () => myCommand.ExecuteAsync(this, chat, inputs));
+                    SynchronousTask runCommandTask = new SynchronousTask(() => RunCommand(myCommand, chat));
+                    runCommandTask.RunTask();
                 }
                 else
                 {
@@ -158,6 +158,13 @@ namespace BassClefStudio.NET.Bots
             {
                 //// Message not understood.
             }
+        }
+
+        private async Task RunCommand(IBotCommand command, BotChat context)
+        {
+            var inputs = new BotParameters(command.Parameters);
+            await inputs.GetParametersAsync(this, context);
+            await command.ExecuteAsync(this, context, inputs);
         }
 
         private void HandleQuery(object sender, InlineQueryReceivedEventArgs e)

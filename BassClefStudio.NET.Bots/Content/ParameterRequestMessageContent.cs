@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace BassClefStudio.NET.Bots.Content
 {
     /// <summary>
-    /// Represents the <see cref="IMessageContent"/> of a message sent to resolve a <see cref="BotCommandParameterValue"/>.
+    /// Represents the <see cref="IMessageContent"/> of a message sent to resolve a command parameter.
     /// </summary>
     public class ParameterRequestMessageContent : IMessageContent
     {
         /// <summary>
-        /// The name of the parameter to request. See <see cref="BotCommandParameterInfo.DisplayName"/>.
+        /// The name of the parameter to request. See <see cref="BotParameterRequest.DisplayName"/>.
         /// </summary>
         public string ParameterName { get; }
 
         /// <summary>
-        /// A description of the parameter to request. See <see cref="BotCommandParameterInfo.Description"/>.
+        /// A description of the parameter to request. See <see cref="BotParameterRequest.Description"/>.
         /// </summary>
         public string ParameterDescription { get; }
 
@@ -25,21 +25,25 @@ namespace BassClefStudio.NET.Bots.Content
         public string Id { get; set; }
 
         /// <summary>
-        /// An action to be run with the <see cref="IMessageContent"/> response when it is recieved.
+        /// A task that returns the response <see cref="IMessageContent"/> at the point that it is received.
         /// </summary>
-        public Action<IMessageContent> ResultCallback { get; }
+        public Task<IMessageContent> GetResponse => CompletionSource.Task;
+
+        /// <summary>
+        /// The backing <see cref="TaskCompletionSource{TResult}"/> for the <see cref="GetResponse"/> task.
+        /// </summary>
+        internal TaskCompletionSource<IMessageContent> CompletionSource { get; }
 
         /// <summary>
         /// Creates a new <see cref="ParameterRequestMessageContent"/>.
         /// </summary>
         /// <param name="parameterName">The name of the parameter to request.</param>
         /// <param name="parameterDescription">A description of the parameter to request.</param>
-        /// <param name="resultCallback">An action to be run with the <see cref="IMessageContent"/> response when it is recieved.</param>
-        public ParameterRequestMessageContent(string parameterName, string parameterDescription, Action<IMessageContent> resultCallback)
+        public ParameterRequestMessageContent(string parameterName, string parameterDescription)
         {
             ParameterName = parameterName;
             ParameterDescription = parameterDescription;
-            ResultCallback = resultCallback;
+            CompletionSource = new TaskCompletionSource<IMessageContent>();
         }
     }
 }

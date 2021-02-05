@@ -19,14 +19,14 @@ namespace BassClefStudio.NET.Bots.Commands
         public string[] CommandNames { get; }
 
         /// <inheritdoc/>
-        public BotCommandParameterInfo[] Parameters { get; }
+        public BotParameterRequest[] Parameters { get; }
 
         /// <summary>
         /// Creates a new <see cref="TextBasedBotCommand"/>.
         /// </summary>
         /// <param name="commandNames">The <see cref="string"/> commands this <see cref="TextBasedBotCommand"/> supports.</param>
-        /// <param name="parameters">An array of <see cref="BotCommandParameterInfo"/> containing information about the required <see cref="IBotCommand"/> parameters.</param>
-        public TextBasedBotCommand(string[] commandNames, BotCommandParameterInfo[] parameters)
+        /// <param name="parameters">An array of <see cref="BotParameterRequest"/> containing information about the required <see cref="IBotCommand"/> parameters.</param>
+        public TextBasedBotCommand(string[] commandNames, BotParameterRequest[] parameters)
         {
             CommandNames = commandNames;
             Parameters = parameters;
@@ -39,6 +39,6 @@ namespace BassClefStudio.NET.Bots.Commands
         }
 
         /// <inheritdoc/>
-        public abstract Task ExecuteAsync(Bot bot, BotChat context, BotCommandParameterValues commandParameters);
+        public abstract Task ExecuteAsync(Bot bot, BotChat context, BotParameters commandParameters);
     }
 }
