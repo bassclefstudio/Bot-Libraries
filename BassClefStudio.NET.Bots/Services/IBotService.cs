@@ -65,8 +65,8 @@ namespace BassClefStudio.NET.Bots.Services
         event EventHandler<InlineQueryReceivedEventArgs> InlineQueryReceived;
 
         /// <summary>
-        /// An event fired when a user initiates a callback through the <see cref="IBotService"/>.
+        /// An event fired when a user invokes an action defined by an active <see cref="IBotAction"/>.
         /// </summary>
-        event EventHandler<CallbackReceivedEventArgs> CallbackReceived;
+        event EventHandler<ActionInvokedEventArgs> ActionInvoked;
     }
 }

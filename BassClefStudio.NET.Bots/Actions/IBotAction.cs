@@ -22,5 +22,15 @@ namespace BassClefStudio.NET.Bots.Actions
         /// A description of the <see cref="IBotAction"/>, sometimes shown to the user.
         /// </summary>
         string Description { get; }
+
+        /// <summary>
+        /// A <see cref="bool"/> indicating whether the <see cref="IBotAction"/> should be removed from the <see cref="BotChat.ActiveActions"/> after it is invoked.
+        /// </summary>
+        bool OneTime { get; }
+
+        /// <summary>
+        /// Completes the <see cref="IBotAction"/>, indicating a user has invoked it.
+        /// </summary>
+        void Complete();
     }
 }

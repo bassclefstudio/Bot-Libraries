@@ -35,9 +35,9 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
                     textMessage.Text,
                     replyMarkup: new InlineKeyboardMarkup(
                         textMessage.Actions.Select(
-                            a => InlineKeyboardButton.WithCallbackData(a.DisplayName, a.CallbackParameter))));
+                            a => InlineKeyboardButton.WithCallbackData(a.DisplayName, a.Id))));
 
-                chat.CurrentCallbackActions.AddRange(textMessage.Actions);
+                chat.ActiveActions.AddRange(textMessage.Actions);
             }
             else
             {

@@ -46,9 +46,9 @@ namespace BassClefStudio.NET.Bots
         public event EventHandler<InlineQueryReceivedEventArgs> InlineQueryReceived;
 
         /// <summary>
-        /// An event fired when a user initiates a callback to the <see cref="Bot"/>.
+        /// An event fired when a user invokes an action defined by an active <see cref="IBotAction"/>.
         /// </summary>
-        public event EventHandler<CallbackReceivedEventArgs> CallbackReceived;
+        public event EventHandler<ActionInvokedEventArgs> ActionInvoked;
 
         /// <summary>
         /// A collection of <see cref="IBotCommand"/>s representing the capabilities of the <see cref="Bot"/>.
@@ -75,7 +75,7 @@ namespace BassClefStudio.NET.Bots
             InlineHandlers = inlineHandlers;
             BotService.MessageReceived += HandleMessage;
             BotService.UnauthorizedMessageReceived += HandleUnauthorized;
-            BotService.CallbackReceived += HandleCallback;
+            BotService.ActionInvoked += HandleAction;
             BotService.InlineQueryReceived += HandleQuery;
         }
 
@@ -196,12 +196,10 @@ namespace BassClefStudio.NET.Bots
             }
         }
 
-        private void HandleCallback(object sender, CallbackReceivedEventArgs e)
+        private void HandleAction(object sender, ActionInvokedEventArgs e)
         {
-            SynchronousTask actionTask = new SynchronousTask(() => e.CallbackAction.Invoke(this, e.ChatContext), SynchronousTask.DefaultExceptionAction);
-            _ = actionTask.RunTaskAsync();
-
-            CallbackReceived?.Invoke(this, e);
+            e.Invoked.Complete();
+            ActionInvoked?.Invoke(this, e);
         }
     }
 }

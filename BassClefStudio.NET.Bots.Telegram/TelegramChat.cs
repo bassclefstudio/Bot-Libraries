@@ -32,7 +32,7 @@ namespace BassClefStudio.NET.Bots.Telegram
     /// <summary>
     /// Represents an <see cref="IBotUser"/> for the <see cref="TelegramBotService"/>.
     /// </summary>
-    public struct TelegramUser : IBotUser
+    public class TelegramUser : IBotUser
     {
         /// <inheritdoc/>
         public string Id => UserId.ToString();
@@ -48,6 +48,35 @@ namespace BassClefStudio.NET.Bots.Telegram
         public TelegramUser(int userId)
         {
             UserId = userId;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="TelegramUser"/>s represent the same user.
+        /// </summary>
+        public static bool operator ==(TelegramUser a, TelegramUser b)
+        {
+            return a.UserId == b.UserId;
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="TelegramUser"/>s represent different users.
+        /// </summary>
+        public static bool operator !=(TelegramUser a, TelegramUser b)
+        {
+            return !(a == b);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return obj is TelegramUser user
+                && user == this;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

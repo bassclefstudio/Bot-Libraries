@@ -26,9 +26,9 @@ namespace BassClefStudio.NET.Bots.Content
         public List<IMessageContent> MessageHistory { get; } = new List<IMessageContent>();
 
         /// <summary>
-        /// A list of all current <see cref="CallbackBotAction"/>s that a <see cref="Bot"/> can respond to in this <see cref="BotChat"/>.
+        /// A list of all current <see cref="IBotAction"/>s that a <see cref="Bot"/> can respond to in this <see cref="BotChat"/>.
         /// </summary>
-        public List<CallbackBotAction> CurrentCallbackActions { get; } = new List<CallbackBotAction>();
+        public List<IBotAction> ActiveActions { get; } = new List<IBotAction>();
     }
 
     /// <summary>
