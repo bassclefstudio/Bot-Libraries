@@ -119,6 +119,9 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// <inheritdoc/>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
+        /// <inheritdoc/>
+        public event EventHandler<UnauthorizedMessageEventArgs> UnauthorizedMessageReceived;
+
         private void OnMessageReceived(object sender, MessageEventArgs e)
         {
             var fromUser = KnownUsers.FirstOrDefault(u => u.UserId == e.Message.From.Id);
@@ -139,6 +142,9 @@ namespace BassClefStudio.NET.Bots.Telegram
             }
             else if (fromUser == null)
             {
+                UnauthorizedMessageReceived?.Invoke(
+                    this, 
+                    new UnauthorizedMessageEventArgs(message, new TelegramUser(e.Message.From.Id)));
                 Debug.WriteLine($"Unauthorized message from {e.Message.From.Id}");
             }
         }
@@ -228,10 +234,10 @@ namespace BassClefStudio.NET.Bots.Telegram
         }
 
         #endregion
-        #region Callback
+        #region Actions
 
         /// <inheritdoc/>
-        public event EventHandler<CallbackReceivedEventArgs> CallbackReceived;
+        public event EventHandler<ActionInvokedEventArgs> ActionInvoked;
 
         private void OnCallback(object sender, CallbackQueryEventArgs e)
         {
@@ -241,16 +247,16 @@ namespace BassClefStudio.NET.Bots.Telegram
                 SynchronousTask answerTask = new SynchronousTask(() => BotClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "Done!"));
                 answerTask.RunTask();
 
-                var action = fromChat.CurrentCallbackActions.FirstOrDefault(a => a.CallbackParameter == e.CallbackQuery.Data);
+                var action = fromChat.ActiveActions.FirstOrDefault(a => a.Id == e.CallbackQuery.Data);
                 if (action != null)
                 {
-                    CallbackReceived?.Invoke(
+                    ActionInvoked?.Invoke(
                         this,
-                        new CallbackReceivedEventArgs(action, fromChat));
+                        new ActionInvokedEventArgs(action, fromChat));
 
                     if (action.OneTime)
                     {
-                        fromChat.CurrentCallbackActions.Remove(action);
+                        fromChat.ActiveActions.Remove(action);
                     }
                 }
             }

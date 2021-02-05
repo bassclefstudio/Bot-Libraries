@@ -36,14 +36,19 @@ namespace BassClefStudio.NET.Bots
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
         /// <summary>
+        /// An event fired when a message is recieved from a user that is not known or authorized to interact with the <see cref="Bot"/>. No action should be taken because of this message (but it could be logged, etc.).
+        /// </summary>
+        public event EventHandler<UnauthorizedMessageEventArgs> UnauthorizedMessageReceived;
+
+        /// <summary>
         /// An event fired when an inline query is submitted by a user.
         /// </summary>
         public event EventHandler<InlineQueryReceivedEventArgs> InlineQueryReceived;
 
         /// <summary>
-        /// An event fired when a user initiates a callback to the <see cref="Bot"/>.
+        /// An event fired when a user invokes an action defined by an active <see cref="IBotAction"/>.
         /// </summary>
-        public event EventHandler<CallbackReceivedEventArgs> CallbackReceived;
+        public event EventHandler<ActionInvokedEventArgs> ActionInvoked;
 
         /// <summary>
         /// A collection of <see cref="IBotCommand"/>s representing the capabilities of the <see cref="Bot"/>.
@@ -69,7 +74,8 @@ namespace BassClefStudio.NET.Bots
             Commands = commands;
             InlineHandlers = inlineHandlers;
             BotService.MessageReceived += HandleMessage;
-            BotService.CallbackReceived += HandleCallback;
+            BotService.UnauthorizedMessageReceived += HandleUnauthorized;
+            BotService.ActionInvoked += HandleAction;
             BotService.InlineQueryReceived += HandleQuery;
         }
 
@@ -130,24 +136,31 @@ namespace BassClefStudio.NET.Bots
 
         private void HandleMessage(object sender, MessageReceivedEventArgs e)
         {
-            ProcessMessage(e.ReceivedContent, e.ChatContext);
-            e.ChatContext.MessageHistory.Add(e.ReceivedContent);
+            SynchronousTask messageTask = new SynchronousTask(() => ProcessMessage(e.Message, e.ChatContext));
+            messageTask.RunTask();
             MessageReceived?.Invoke(this, e);
         }
 
-        private void ProcessMessage(IMessageContent message, BotChat chat)
+        private void HandleUnauthorized(object sender, UnauthorizedMessageEventArgs e)
         {
-            if (chat.MessageHistory.Any() && chat.MessageHistory.Last() is ParameterRequestMessageContent request)
+            //// Simply pass through the message without invoking any action.
+            UnauthorizedMessageReceived?.Invoke(this, e);
+        }
+
+        private async Task ProcessMessage(IMessageContent message, BotChat context)
+        {
+            if (context.MessageHistory.Any() && context.MessageHistory.Last() is ParameterRequestMessageContent request)
             {
-                request.ResultCallback(message);
+                request.CompletionSource.TrySetResult(message);
             }
             else if (message is CommandMessageContent commandMessage)
             {
                 var myCommand = Commands.FirstOrDefault(c => c.CanExecute(commandMessage));
                 if (myCommand != null)
                 {
-                    var inputs = new BotCommandParameterValues(myCommand);
-                    inputs.PopulateValues(this, chat, () => myCommand.ExecuteAsync(this, chat, inputs));
+                    var inputs = new BotParameters(myCommand.Parameters);
+                    await inputs.GetParametersAsync(this, context);
+                    await myCommand.ExecuteAsync(this, context, inputs);
                 }
                 else
                 {
@@ -158,6 +171,8 @@ namespace BassClefStudio.NET.Bots
             {
                 //// Message not understood.
             }
+
+            context.MessageHistory.Add(message);
         }
 
         private void HandleQuery(object sender, InlineQueryReceivedEventArgs e)
@@ -181,12 +196,10 @@ namespace BassClefStudio.NET.Bots
             }
         }
 
-        private void HandleCallback(object sender, CallbackReceivedEventArgs e)
+        private void HandleAction(object sender, ActionInvokedEventArgs e)
         {
-            SynchronousTask actionTask = new SynchronousTask(() => e.CallbackAction.Invoke(this, e.ChatContext), SynchronousTask.DefaultExceptionAction);
-            _ = actionTask.RunTaskAsync();
-
-            CallbackReceived?.Invoke(this, e);
+            e.Invoked.Complete();
+            ActionInvoked?.Invoke(this, e);
         }
     }
 }

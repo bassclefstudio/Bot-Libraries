@@ -14,7 +14,7 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// The recieved message content.
         /// </summary>
-        public IMessageContent ReceivedContent { get; }
+        public IMessageContent Message { get; }
 
         /// <summary>
         /// The <see cref="BotChat"/> this message was sent to.
@@ -24,11 +24,11 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// Creates a new <see cref="MessageReceivedEventArgs"/>.
         /// </summary>
-        /// <param name="receivedContent">The recieved message content.</param>
+        /// <param name="message">The recieved message content.</param>
         /// <param name="fromChat">The <see cref="BotChat"/> this message was sent to.</param>
-        public MessageReceivedEventArgs(IMessageContent receivedContent, BotChat fromChat)
+        public MessageReceivedEventArgs(IMessageContent message, BotChat fromChat)
         {
-            ReceivedContent = receivedContent;
+            Message = message;
             ChatContext = fromChat;
         }
     }

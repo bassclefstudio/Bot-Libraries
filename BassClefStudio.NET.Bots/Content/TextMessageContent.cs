@@ -19,26 +19,19 @@ namespace BassClefStudio.NET.Bots.Content
         public string Id { get; set; }
 
         /// <summary>
-        /// A collection of <see cref="CallbackBotAction"/>s that represent attached actionable buttons or responses.
+        /// A collection of <see cref="IBotAction"/>s that represent attached actionable buttons or responses.
         /// </summary>
-        public List<CallbackBotAction> Actions { get; }
+        public IEnumerable<IBotAction> Actions { get; }
 
         /// <summary>
         /// Creates a new <see cref="TextMessageContent"/> with a unique ID.
         /// </summary>
         /// <param name="text">The content of the message.</param>
-        /// <param name="actions">A collection of <see cref="CallbackBotAction"/>s that represent attached actionable buttons or responses.</param>
-        public TextMessageContent(string text, IEnumerable<CallbackBotAction> actions = null)
+        /// <param name="actions">A collection of <see cref="IBotAction"/>s that represent attached actionable buttons or responses.</param>
+        public TextMessageContent(string text, IEnumerable<IBotAction> actions = null)
         {
             Text = text;
-            if (actions != null)
-            {
-                Actions = new List<CallbackBotAction>(actions);
-            }
-            else
-            {
-                Actions = new List<CallbackBotAction>();
-            }
+            Actions = actions;
         }
 
         /// <inheritdoc/>
