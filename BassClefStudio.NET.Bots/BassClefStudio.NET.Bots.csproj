@@ -7,7 +7,7 @@
     <RepositoryUrl>https://github.com/bassclefstudio/Bot-Libraries.git</RepositoryUrl>
     <Authors>BassClefStudio</Authors>
     <Description>A .NET Standard library for managing and dealing with bot communicatoin in a platform-agnostic manner.</Description>
-    <Version>1.3.2</Version>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

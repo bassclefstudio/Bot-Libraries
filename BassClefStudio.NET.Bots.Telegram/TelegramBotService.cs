@@ -73,6 +73,7 @@ namespace BassClefStudio.NET.Bots.Telegram
             ////Add default services
             SendServices.Add(new TelegramTextSendService());
             SendServices.Add(new TelegramParameterRequestSendService());
+            SendServices.Add(new TelegramFileSendService());
             EditServices.Add(new TelegramTextEditService());
             RecieveServices.Add(new TelegramTextRecieveService());
             InlineCardServices.Add(new TelegramTextInlineCardsService());

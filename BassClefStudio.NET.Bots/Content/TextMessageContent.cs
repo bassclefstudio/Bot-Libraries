@@ -13,7 +13,7 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// The content of the message.
         /// </summary>
-        public string Text { get; }
+        public string Text { get; set; }
 
         /// <inheritdoc/>
         public string Id { get; set; }
@@ -21,7 +21,7 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// A collection of <see cref="CallbackBotAction"/>s that represent attached actionable buttons or responses.
         /// </summary>
-        public IEnumerable<CallbackBotAction> Actions { get; }
+        public List<CallbackBotAction> Actions { get; }
 
         /// <summary>
         /// Creates a new <see cref="TextMessageContent"/> with a unique ID.
@@ -31,7 +31,14 @@ namespace BassClefStudio.NET.Bots.Content
         public TextMessageContent(string text, IEnumerable<CallbackBotAction> actions = null)
         {
             Text = text;
-            Actions = actions;
+            if (actions != null)
+            {
+                Actions = new List<CallbackBotAction>(actions);
+            }
+            else
+            {
+                Actions = new List<CallbackBotAction>();
+            }
         }
 
         /// <inheritdoc/>
