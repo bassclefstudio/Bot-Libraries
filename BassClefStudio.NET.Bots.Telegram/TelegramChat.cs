@@ -32,14 +32,14 @@ namespace BassClefStudio.NET.Bots.Telegram
     /// <summary>
     /// Represents an <see cref="IBotUser"/> for the <see cref="TelegramBotService"/>.
     /// </summary>
-    public class TelegramUser : IBotUser
+    public struct TelegramUser : IBotUser
     {
         /// <inheritdoc/>
         public string Id => UserId.ToString();
         /// <summary>
         /// The ID of the user in Telegram.
         /// </summary>
-        public int UserId { get; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// Create a new <see cref="TelegramUser"/>

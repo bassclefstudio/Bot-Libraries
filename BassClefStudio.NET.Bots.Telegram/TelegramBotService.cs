@@ -118,6 +118,9 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// <inheritdoc/>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
+        /// <inheritdoc/>
+        public event EventHandler<UnauthorizedMessageEventArgs> UnauthorizedMessageReceived;
+
         private void OnMessageReceived(object sender, MessageEventArgs e)
         {
             var fromUser = KnownUsers.FirstOrDefault(u => u.UserId == e.Message.From.Id);
@@ -138,6 +141,9 @@ namespace BassClefStudio.NET.Bots.Telegram
             }
             else if (fromUser == null)
             {
+                UnauthorizedMessageReceived?.Invoke(
+                    this, 
+                    new UnauthorizedMessageEventArgs(message, new TelegramUser(e.Message.From.Id)));
                 Debug.WriteLine($"Unauthorized message from {e.Message.From.Id}");
             }
         }

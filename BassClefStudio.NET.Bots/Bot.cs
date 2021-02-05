@@ -36,6 +36,11 @@ namespace BassClefStudio.NET.Bots
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
         /// <summary>
+        /// An event fired when a message is recieved from a user that is not known or authorized to interact with the <see cref="Bot"/>. No action should be taken because of this message (but it could be logged, etc.).
+        /// </summary>
+        public event EventHandler<UnauthorizedMessageEventArgs> UnauthorizedMessageReceived;
+
+        /// <summary>
         /// An event fired when an inline query is submitted by a user.
         /// </summary>
         public event EventHandler<InlineQueryReceivedEventArgs> InlineQueryReceived;
@@ -69,6 +74,7 @@ namespace BassClefStudio.NET.Bots
             Commands = commands;
             InlineHandlers = inlineHandlers;
             BotService.MessageReceived += HandleMessage;
+            BotService.UnauthorizedMessageReceived += HandleUnauthorized;
             BotService.CallbackReceived += HandleCallback;
             BotService.InlineQueryReceived += HandleQuery;
         }
@@ -133,6 +139,12 @@ namespace BassClefStudio.NET.Bots
             SynchronousTask messageTask = new SynchronousTask(() => ProcessMessage(e.Message, e.ChatContext));
             messageTask.RunTask();
             MessageReceived?.Invoke(this, e);
+        }
+
+        private void HandleUnauthorized(object sender, UnauthorizedMessageEventArgs e)
+        {
+            //// Simply pass through the message without invoking any action.
+            UnauthorizedMessageReceived?.Invoke(this, e);
         }
 
         private async Task ProcessMessage(IMessageContent message, BotChat context)

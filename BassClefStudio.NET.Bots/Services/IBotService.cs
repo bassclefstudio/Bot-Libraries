@@ -49,6 +49,11 @@ namespace BassClefStudio.NET.Bots.Services
         event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
         /// <summary>
+        /// An event fired when a message is recieved from a user that is not known or authorized to interact with the <see cref="IBotService"/>. No action should be taken because of this message (but it could be logged, etc.).
+        /// </summary>
+        event EventHandler<UnauthorizedMessageEventArgs> UnauthorizedMessageReceived;
+
+        /// <summary>
         /// Updates the available <see cref="InlineCards"/> displayed to a user.
         /// </summary>
         /// <param name="response">The available inline queries in an <see cref="InlineCards"/> object.</param>
