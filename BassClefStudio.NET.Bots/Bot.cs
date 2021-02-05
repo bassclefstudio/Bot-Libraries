@@ -130,14 +130,14 @@ namespace BassClefStudio.NET.Bots
 
         private void HandleMessage(object sender, MessageReceivedEventArgs e)
         {
-            ProcessMessage(e.ReceivedContent, e.ChatContext);
-            e.ChatContext.MessageHistory.Add(e.ReceivedContent);
+            SynchronousTask messageTask = new SynchronousTask(() => ProcessMessage(e.Message, e.ChatContext));
+            messageTask.RunTask();
             MessageReceived?.Invoke(this, e);
         }
 
-        private void ProcessMessage(IMessageContent message, BotChat chat)
+        private async Task ProcessMessage(IMessageContent message, BotChat context)
         {
-            if (chat.MessageHistory.Any() && chat.MessageHistory.Last() is ParameterRequestMessageContent request)
+            if (context.MessageHistory.Any() && context.MessageHistory.Last() is ParameterRequestMessageContent request)
             {
                 request.CompletionSource.TrySetResult(message);
             }
@@ -146,8 +146,9 @@ namespace BassClefStudio.NET.Bots
                 var myCommand = Commands.FirstOrDefault(c => c.CanExecute(commandMessage));
                 if (myCommand != null)
                 {
-                    SynchronousTask runCommandTask = new SynchronousTask(() => RunCommand(myCommand, chat));
-                    runCommandTask.RunTask();
+                    var inputs = new BotParameters(myCommand.Parameters);
+                    await inputs.GetParametersAsync(this, context);
+                    await myCommand.ExecuteAsync(this, context, inputs);
                 }
                 else
                 {
@@ -158,13 +159,8 @@ namespace BassClefStudio.NET.Bots
             {
                 //// Message not understood.
             }
-        }
 
-        private async Task RunCommand(IBotCommand command, BotChat context)
-        {
-            var inputs = new BotParameters(command.Parameters);
-            await inputs.GetParametersAsync(this, context);
-            await command.ExecuteAsync(this, context, inputs);
+            context.MessageHistory.Add(message);
         }
 
         private void HandleQuery(object sender, InlineQueryReceivedEventArgs e)
