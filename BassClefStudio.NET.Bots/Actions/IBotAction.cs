@@ -3,6 +3,7 @@ using BassClefStudio.NET.Bots.Services;
 using BassClefStudio.NET.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,5 +33,35 @@ namespace BassClefStudio.NET.Bots.Actions
         /// Completes the <see cref="IBotAction"/>, indicating a user has invoked it.
         /// </summary>
         void Complete();
+    }
+
+    /// <summary>
+    /// Represents an <see cref="IBotAction"/> presented to the user that can return a <typeparamref name="T"/> result when invoked.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IBotAction<T> : IBotAction
+    {
+        /// <summary>
+        /// A <see cref="Task{TResult}"/> that will, if/when the <see cref="IBotAction{T}"/> is invoked, return this action's <typeparamref name="T"/> result.
+        /// </summary>
+        Task<T> AwaitValueTask { get; }
+    }
+
+    /// <summary>
+    /// Extension methods for the <see cref="IBotAction"/> interface.
+    /// </summary>
+    public static class BotActionExtensions
+    {
+        /// <summary>
+        /// Waits for the completion of any of a collection of <see cref="IBotAction{T}"/>s and returns the <see cref="IBotAction{T}.AwaitValueTask"/> result of that invoked action.
+        /// </summary>
+        /// <typeparam name="T">The type of the <see cref="IBotAction{T}"/>s involved (and the type of the output).</typeparam>
+        /// <param name="actions">The collection of <see cref="IBotAction{T}"/>s to await.</param>
+        /// <returns>Asynchronously returns the <typeparamref name="T"/> output value of the first <see cref="IBotAction{T}"/> that completes.</returns>
+        public static async Task<T> AwaitValueAsync<T>(this IEnumerable<IBotAction<T>> actions)
+        {
+            var completed = await Task.WhenAny(actions.Select(a => a.AwaitValueTask));
+            return await completed;
+        }
     }
 }
