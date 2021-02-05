@@ -55,7 +55,7 @@ namespace BassClefStudio.NET.Bots.Telegram
         /// </summary>
         public static bool operator ==(TelegramUser a, TelegramUser b)
         {
-            return a.UserId == b.UserId;
+            return a?.UserId == b?.UserId;
         }
 
         /// <summary>
