@@ -32,6 +32,8 @@ namespace BassClefStudio.NET.Bots.Actions
         private TaskCompletionSource<T> CompletionSource { get; }
         /// <inheritdoc/>
         public Task<T> AwaitValueTask => CompletionSource.Task;
+        /// <inheritdoc/>
+        public Task AwaitCompletionTask => CompletionSource.Task;
 
         /// <summary>
         /// Creates a new <see cref="ResultBotAction{T}"/>.
