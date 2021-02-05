@@ -18,17 +18,17 @@ namespace BassClefStudio.NET.Bots.Actions
         /// <summary>
         /// The <see cref="BotChat"/> that sent the callback.
         /// </summary>
-        public BotChat FromChat { get; }
+        public BotChat ChatContext { get; }
 
         /// <summary>
         /// Creates a new <see cref="CallbackReceivedEventArgs"/>.
         /// </summary>
         /// <param name="action">The related <see cref="CallbackBotAction"/>.</param>
-        /// <param name="fromChat">The <see cref="BotChat"/> that sent the callback.</param>
-        public CallbackReceivedEventArgs(CallbackBotAction action, BotChat fromChat)
+        /// <param name="chatContext">The <see cref="BotChat"/> that sent the callback.</param>
+        public CallbackReceivedEventArgs(CallbackBotAction action, BotChat chatContext)
         {
             CallbackAction = action;
-            FromChat = fromChat;
+            ChatContext = chatContext;
         }
     }
 }

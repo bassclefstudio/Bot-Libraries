@@ -27,5 +27,11 @@ namespace BassClefStudio.NET.Bots.Telegram
             QueryString = queryString;
             QueryId = id;
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return QueryString;
+        }
     }
 }
