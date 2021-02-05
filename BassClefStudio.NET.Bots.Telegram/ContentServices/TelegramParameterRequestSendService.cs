@@ -25,7 +25,7 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
 
             var success = await service.BotClient.SendTextMessageAsync(
                 telegramChat.ChatId, 
-                $"<b>{requestMessage.ParameterName}</b>\r\n{requestMessage.ParameterDescription}", 
+                $"<b>{requestMessage.Request.DisplayName}</b>\r\n{requestMessage.Request.Description}", 
                 ParseMode.Html);
 
             if (success != null)

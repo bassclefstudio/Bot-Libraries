@@ -31,14 +31,7 @@ namespace BassClefStudio.NET.Bots.Content
         public TextMessageContent(string text, IEnumerable<IBotAction> actions = null)
         {
             Text = text;
-            if (actions != null)
-            {
-                Actions = new List<CallbackBotAction>(actions);
-            }
-            else
-            {
-                Actions = new List<CallbackBotAction>();
-            }
+            Actions = actions;
         }
 
         /// <inheritdoc/>
