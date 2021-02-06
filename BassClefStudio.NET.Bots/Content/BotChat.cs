@@ -29,6 +29,15 @@ namespace BassClefStudio.NET.Bots.Content
         /// A list of all current <see cref="IBotAction"/>s that a <see cref="Bot"/> can respond to in this <see cref="BotChat"/>.
         /// </summary>
         public List<IBotAction> ActiveActions { get; } = new List<IBotAction>();
+
+        /// <summary>
+        /// Adds the unique <see cref="IBotAction"/>s from a collection into the <see cref="ActiveActions"/> list.
+        /// </summary>
+        /// <param name="actions">The list of <see cref="IBotAction"/>s to include.</param>
+        public void IncludeActions(IEnumerable<IBotAction> actions)
+        {
+            ActiveActions.AddRange(actions.Where(a => !ActiveActions.Contains(a)));
+        }
     }
 
     /// <summary>
