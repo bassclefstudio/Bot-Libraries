@@ -21,17 +21,17 @@ namespace BassClefStudio.NET.Bots.Content
         /// <summary>
         /// A collection of <see cref="IBotAction"/>s that represent attached actionable buttons or responses.
         /// </summary>
-        public IEnumerable<IBotAction> Actions { get; }
+        public List<IBotAction> Actions { get; }
 
         /// <summary>
         /// Creates a new <see cref="TextMessageContent"/> with a unique ID.
         /// </summary>
         /// <param name="text">The content of the message.</param>
         /// <param name="actions">A collection of <see cref="IBotAction"/>s that represent attached actionable buttons or responses.</param>
-        public TextMessageContent(string text, IEnumerable<IBotAction> actions = null)
+        public TextMessageContent(string text, params IBotAction[] actions)
         {
             Text = text;
-            Actions = actions;
+            Actions = new List<IBotAction>(actions);
         }
 
         /// <inheritdoc/>

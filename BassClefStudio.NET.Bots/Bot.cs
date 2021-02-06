@@ -123,7 +123,7 @@ namespace BassClefStudio.NET.Bots
         {
             if (chat.MessageHistory.Contains(content))
             {
-                var success = await BotService.SendMessageAsync(content, chat);
+                var success = await BotService.AttemptEditMessageAsync(content, chat);
                 //// Does not add message to chat history, because the message content has already been added.
                 return success;
             }
