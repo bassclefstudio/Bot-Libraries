@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace BassClefStudio.NET.Bots.Telegram.ContentServices
@@ -33,6 +34,7 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
                     new ChatId(telegramChat.ChatId),
                     int.Parse(message.Id),
                     textMessage.Text,
+                    ParseMode.Html,
                     replyMarkup: new InlineKeyboardMarkup(
                         textMessage.Actions.Select(
                             a => InlineKeyboardButton.WithCallbackData(a.DisplayName, a.Id))));
