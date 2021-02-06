@@ -36,7 +36,7 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
                         textMessage.Actions.Select(
                             a => InlineKeyboardButton.WithCallbackData(a.DisplayName, a.Id))));
 
-                chat.ActiveActions.AddRange(textMessage.Actions);
+                chat.IncludeActions(textMessage.Actions);
             }
             else
             {
