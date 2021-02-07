@@ -46,7 +46,8 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
                 success = await service.BotClient.EditMessageTextAsync(
                     new ChatId(telegramChat.ChatId),
                     int.Parse(message.Id),
-                    textMessage.Text);
+                    textMessage.Text,
+                    ParseMode.Html);
             }
 
             return success != null;
