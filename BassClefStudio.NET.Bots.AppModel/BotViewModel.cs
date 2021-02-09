@@ -34,9 +34,12 @@ namespace BassClefStudio.NET.Bots.AppModel
         /// <summary>
         /// Creates a new <see cref="BotViewModel"/> with the required services.
         /// </summary>
-        public BotViewModel(string botName, App myApp, Bot mathSolveBot)
+        /// <param name="botName">The name of the <see cref="Bot"/>.</param>
+        /// <param name="myApp">The AppModel <see cref="App"/> to connect this <see cref="Bot"/> to.</param>
+        /// <param name="myBot">The <see cref="Bot"/> this <see cref="IViewModel"/> will manage.</param>
+        public BotViewModel(string botName, App myApp, Bot myBot)
         {
-            MyBot = mathSolveBot;
+            MyBot = myBot;
             MyApp = myApp;
             BotName = botName;
         }

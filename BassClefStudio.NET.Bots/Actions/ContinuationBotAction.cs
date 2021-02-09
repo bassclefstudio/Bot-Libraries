@@ -1,4 +1,5 @@
 ﻿using BassClefStudio.NET.Bots.Content;
+using BassClefStudio.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 namespace BassClefStudio.NET.Bots.Actions
 {
     /// <summary>
-    /// An <see cref="IBotAction{T}"/> that uses a <see cref="TaskCompletionSource{TResult}"/> to return a constant <typeparamref name="T"/> value when invoked.
+    /// An <see cref="IBotAction"/> that uses an event-based <see cref="ContinueTask"/> instead of awaiting for a result, which is more performant for dealing with optional actions.
     /// </summary>
-    public class LambdaBotAction<T> : IBotAction<T>
+    public class ContinuationBotAction : IBotAction
     {
         /// <inheritdoc/>
         public string DisplayName { get; }
@@ -24,36 +25,32 @@ namespace BassClefStudio.NET.Bots.Actions
         public string Id { get; }
 
         /// <summary>
-        /// A function returning a <typeparamref name="T"/> value that will be sent to the <see cref="AwaitValueTask"/> when the action is invoked (see <see cref="Complete"/>).
+        /// A function returning a <see cref="Task"/>that will be excuted when the action is invoked (see <see cref="Complete"/>).
         /// </summary>
-        public Func<T> ReturnFunc { get; }
-
-        private TaskCompletionSource<T> CompletionSource { get; }
-        /// <inheritdoc/>
-        public Task<T> AwaitValueTask => CompletionSource.Task;
+        public Func<Task> ContinueTask { get; }
 
         /// <summary>
-        /// Creates a new <see cref="LambdaBotAction{T}"/>.
+        /// Creates a new <see cref="ContinuationBotAction"/>.
         /// </summary>
         /// <param name="id">The unique ID of the <see cref="IBotAction"/>.</param>
         /// <param name="name">The name of the action button, given to the user.</param>
-        /// <param name="returnFunc">A function returning a <typeparamref name="T"/> value that will be sent to the <see cref="AwaitValueTask"/> when the action is invoked (see <see cref="Complete"/>).</param>
+        /// <param name="continueTask">A function returning a <see cref="Task"/>that will be excuted when the action is invoked (see <see cref="Complete"/>).</param>
         /// <param name="description">A description of the <see cref="IBotAction"/>, sometimes shown to the user.</param>
         /// <param name="oneTime">A <see cref="bool"/> indicating whether the <see cref="IBotAction"/> should be removed from the <see cref="BotChat.ActiveActions"/> after it is invoked.</param>
-        public LambdaBotAction(string id, string name, Func<T> returnFunc, string description = null, bool oneTime = true)
+        public ContinuationBotAction(string id, string name, Func<Task> continueTask, string description = null, bool oneTime = true)
         {
             Id = id;
             DisplayName = name;
-            ReturnFunc = returnFunc;
+            ContinueTask = continueTask;
             Description = description;
             OneTime = oneTime;
-            CompletionSource = new TaskCompletionSource<T>();
         }
 
         /// <inheritdoc/>
         public void Complete()
         {
-            CompletionSource.TrySetResult(ReturnFunc());
+            SynchronousTask continueTask = new SynchronousTask(ContinueTask);
+            continueTask.RunTask();
         }
     }
 }
