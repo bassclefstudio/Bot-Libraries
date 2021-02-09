@@ -29,11 +29,30 @@ namespace BassClefStudio.NET.Bots.Telegram.ContentServices
             Message success;
             using (var fileStream = fileMessage.GetStream())
             {
-                success = await service.BotClient.SendDocumentAsync(
-                    telegramChat.ChatId,
-                    new InputOnlineFile(fileStream, fileMessage.FileName),
-                    fileMessage.Description,
-                    ParseMode.Html);
+                if (fileMessage.ContentType == Content.FileType.Picture)
+                {
+                    success = await service.BotClient.SendPhotoAsync(
+                           telegramChat.ChatId,
+                           new InputOnlineFile(fileStream, fileMessage.FileName),
+                           fileMessage.Description,
+                           ParseMode.Html);
+                }
+                else if (fileMessage.ContentType == Content.FileType.Video)
+                {
+                    success = await service.BotClient.SendVideoAsync(
+                        telegramChat.ChatId,
+                        new InputOnlineFile(fileStream, fileMessage.FileName),
+                        caption: fileMessage.Description,
+                        parseMode: ParseMode.Html);
+                }
+                else
+                {
+                    success = await service.BotClient.SendDocumentAsync(
+                        telegramChat.ChatId,
+                        new InputOnlineFile(fileStream, fileMessage.FileName),
+                        fileMessage.Description,
+                        ParseMode.Html);
+                }
             }
 
             if (success != null)
